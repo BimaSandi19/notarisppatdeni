@@ -18,6 +18,11 @@ class SecurityHeaders
     {
         $response = $next($request);
 
+        // Cache Control Headers
+        $response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
         // Mencegah clickjacking attack
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
 
