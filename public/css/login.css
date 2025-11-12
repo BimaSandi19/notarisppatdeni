@@ -1,0 +1,189 @@
+/* =========================================================
+   LOGIN PAGE — Theme: Navy
+   ========================================================= */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+/* Tokens */
+:root {
+    --navy: #1a3b6b;
+    --navy-600: #163259;
+    --subtext: #6c7a8a;
+
+    --bg-main: #ffffff;
+    --illustration-bg: #f3f6fb; /* sisi kanan */
+    --field-bg: #eef3fb; /* input normal */
+    --field-bg-focus: #e4ecfa; /* input fokus */
+    --field-border: #d3deee;
+}
+
+/* Base */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background-color: var(--bg-main);
+    color: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container & card */
+.box {
+    height: 100vh;
+}
+
+.login-card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+/* Heading & sub */
+.heading {
+    font-size: 28px;
+    color: var(--navy);
+}
+.subheading {
+    font-size: 15px;
+    color: #d4a017;
+}
+
+/* Logo & illustration */
+.logo {
+    width: 350px;
+}
+.login-illustration {
+    background-color: var(--illustration-bg);
+}
+.illustration {
+    width: 516px;
+    padding-right: 12px;
+}
+
+/* Field (username/password) */
+.field-wrap {
+    position: relative;
+}
+
+input.form-control.field-input {
+    height: 48px;
+    width: 100%;
+    background: var(--field-bg) !important;
+    border: 1px solid var(--field-border);
+    border-radius: 10px;
+    padding-left: 48px;
+    padding-right: 44px;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+input.form-control.field-input:focus {
+    background: var(--field-bg-focus) !important;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(26, 59, 107, 0.12);
+    outline: none;
+}
+
+/* Autofill Chrome */
+input.form-control.field-input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--field-bg) inset !important;
+    -webkit-text-fill-color: #111 !important;
+}
+input.form-control.field-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--field-bg-focus) inset !important;
+}
+
+/* Icons */
+.field-left {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1;
+    pointer-events: none;
+}
+.field-right {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    padding: 0;
+    line-height: 1;
+    cursor: pointer;
+}
+.text-navy {
+    color: var(--navy);
+}
+
+/* Links */
+.link-navy {
+    color: var(--navy);
+    text-decoration: none;
+}
+.link-navy:hover {
+    color: var(--navy-600);
+    text-decoration: underline;
+}
+
+/* Buttons */
+.btn-lg-wide {
+    width: 140px;
+    height: 50px;
+    border-radius: 16px;
+}
+
+.btn-navy {
+    background-color: var(--bg-main);
+    border: 2px solid var(--navy);
+    color: var(--navy);
+    border-radius: 16px;
+    font-weight: 600;
+}
+.btn-navy:hover {
+    background-color: var(--navy);
+    color: #fff;
+    border-color: var(--navy);
+}
+
+/* Right panel height */
+.login-img {
+    height: 574px;
+} /* if needed elsewhere */
+
+.form-container {
+    max-width: 420px; /* ubah sesuai selera (320–400px bagus) */
+    width: 100%;
+}
+
+/* Tombol warna emas */
+.btn-gold {
+  background-color: var(--bg-main);
+  border: 2px solid #d4a017;
+  color: #d4a017;
+  border-radius: 16px;
+  font-weight: 700;
+  width: 140px;
+  height: 50px;
+  transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+  background-color: #d4a017;
+  color: #fff;
+}
+

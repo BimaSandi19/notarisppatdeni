@@ -1,0 +1,62 @@
+/* Print Styles for Direct Print */
+@media print {
+    @page {
+        size: landscape;
+        margin: 10mm;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    .card,
+    .card * {
+        visibility: visible;
+    }
+
+    .card {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    .card-header .toolbar,
+    .btn,
+    button,
+    .dropdown,
+    .pagination {
+        display: none !important;
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9px;
+    }
+
+    table th,
+    table td {
+        border: 1px solid #333 !important;
+        padding: 4px !important;
+    }
+
+    table thead {
+        background-color: #4472c4 !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    table tbody tr:nth-child(even) {
+        background-color: #f9f9f9 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
