@@ -29,7 +29,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             editModal.querySelector("#edit_id").value = id || "";
             editModal.querySelector("#nama_nasabah_edit").value = nama;
+
+            // Set nomor kwitansi - readonly visible + hidden for submit
             editModal.querySelector("#nomor_kwitansi_edit").value = kwitansi;
+            editModal.querySelector("#nomor_kwitansi_edit_hidden").value =
+                kwitansi;
+
             // format and set nominal (visible + hidden)
             const nomVis = editModal.querySelector("#nominal_tagihan_edit");
             const nomHidden = editModal.querySelector(
@@ -156,8 +161,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const tambahForm = document.getElementById("tambahReminderForm");
+    const btnTambahSubmit = document.getElementById("btnTambahSubmit");
+
     if (tambahForm) {
+        // Validation
         tambahForm.addEventListener("submit", function (e) {
+            // ========== PREVENT DOUBLE SUBMIT FIRST ==========
+            if (btnTambahSubmit && btnTambahSubmit.disabled) {
+                e.preventDefault();
+                return false; // Already submitting, block duplicate
+            }
+
             const vis = document.getElementById("nominal_tagihan_create");
             const hid = document.getElementById(
                 "nominal_tagihan_create_hidden",
@@ -166,8 +180,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 e.preventDefault();
                 vis.classList.add("is-invalid");
                 vis.focus();
+                return; // Stop here if validation fails
+            }
+
+            // Disable button IMMEDIATELY
+            if (btnTambahSubmit) {
+                // Disable button
+                btnTambahSubmit.disabled = true;
+
+                // Show spinner, hide text
+                const btnText = btnTambahSubmit.querySelector(".btn-text");
+                const spinner =
+                    btnTambahSubmit.querySelector(".spinner-border");
+                if (btnText) btnText.classList.add("d-none");
+                if (spinner) spinner.classList.remove("d-none");
+
+                // Optional: Re-enable setelah 5 detik jika ada error (fallback)
+                setTimeout(() => {
+                    btnTambahSubmit.disabled = false;
+                    if (btnText) btnText.classList.remove("d-none");
+                    if (spinner) spinner.classList.add("d-none");
+                }, 5000);
             }
         });
+
         // remove invalid state on input
         const visCreate = document.getElementById("nominal_tagihan_create");
         if (visCreate)
@@ -177,8 +213,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const editForm = document.getElementById("editReminderForm");
+    const btnEditSubmit = document.getElementById("btnEditSubmit");
+
     if (editForm) {
+        // Validation
         editForm.addEventListener("submit", function (e) {
+            // ========== PREVENT DOUBLE SUBMIT FIRST ==========
+            if (btnEditSubmit && btnEditSubmit.disabled) {
+                e.preventDefault();
+                return false; // Already submitting, block duplicate
+            }
+
             const vis = document.getElementById("nominal_tagihan_edit");
             const hid = document.getElementById("nominal_tagihan_edit_hidden");
             if (!validateNominal(vis, hid)) {
@@ -200,9 +245,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
                 if (!konfirmasi) {
                     e.preventDefault();
+                    return;
                 }
             }
+
+            // Disable button IMMEDIATELY
+            if (btnEditSubmit) {
+                // Disable button
+                btnEditSubmit.disabled = true;
+
+                // Show spinner, hide text
+                const btnText = btnEditSubmit.querySelector(".btn-text");
+                const spinner = btnEditSubmit.querySelector(".spinner-border");
+                if (btnText) btnText.classList.add("d-none");
+                if (spinner) spinner.classList.remove("d-none");
+
+                // Optional: Re-enable setelah 5 detik jika ada error (fallback)
+                setTimeout(() => {
+                    btnEditSubmit.disabled = false;
+                    if (btnText) btnText.classList.remove("d-none");
+                    if (spinner) spinner.classList.add("d-none");
+                }, 3000);
+            }
         });
+
         const visEdit = document.getElementById("nominal_tagihan_edit");
         if (visEdit)
             visEdit.addEventListener("input", () =>

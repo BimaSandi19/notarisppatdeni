@@ -17,6 +17,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- ([resources/css/app.css, resources/js/app.js -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- SweetAlert2 CDN --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- Iconify is loaded in the footer (components.admFooter) to avoid duplicate loads --}}
     {{-- CSS --}}
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}" />

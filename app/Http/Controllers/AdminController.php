@@ -222,8 +222,8 @@ class AdminController extends Controller
                 $query->orderBy('nominal_tagihan', 'asc');
                 break;
             default:
-                // Default sorting: tanggal tagihan descending
-                $query->orderBy('tanggal_tagihan', 'desc');
+                // Default sorting: data terbaru ditambahkan (created_at DESC)
+                $query->orderBy('created_at', 'desc');
                 break;
         }
 
@@ -275,8 +275,8 @@ class AdminController extends Controller
                 $query->orderBy('nominal_tagihan', 'asc');
                 break;
             default:
-                // Default sorting: tanggal tagihan descending
-                $query->orderBy('tanggal_tagihan', 'desc');
+                // Default sorting: data terbaru muncul pertama (created_at DESC)
+                $query->orderBy('created_at', 'desc');
                 break;
         }
 
@@ -326,21 +326,33 @@ class AdminController extends Controller
         // Menghapus titik dari nominal_tagihan untuk mengubahnya menjadi angka
         $nominalTagihan = str_replace('.', '', $validated['nominal_tagihan']);
 
-        // Menyimpan data ke database menggunakan Eloquent dengan nominal_tagihan yang telah dimodifikasi
-        $reminder = Reminder::create([
-            'nama_nasabah' => $validated['nama_nasabah'],
-            'nomor_kwitansi' => $validated['nomor_kwitansi'],
-            'nominal_tagihan' => $nominalTagihan,
-            'status_pembayaran' => $validated['status_pembayaran'],
-            'keterangan' => $validated['keterangan'] ?? null,
-            'tanggal_tagihan' => $validated['tanggal_tagihan'],
-            'user_id' => Auth::id(),
-        ]);
+        try {
+            // Menyimpan data ke database menggunakan Eloquent dengan nominal_tagihan yang telah dimodifikasi
+            $reminder = Reminder::create([
+                'nama_nasabah' => $validated['nama_nasabah'],
+                'nomor_kwitansi' => $validated['nomor_kwitansi'],
+                'nominal_tagihan' => $nominalTagihan,
+                'status_pembayaran' => $validated['status_pembayaran'],
+                'keterangan' => $validated['keterangan'] ?? null,
+                'tanggal_tagihan' => $validated['tanggal_tagihan'],
+                'user_id' => Auth::id(),
+            ]);
 
-        // Redirect ke halaman reminder dengan pesan sukses
-        return redirect()->route('admin.reminder')->with('success', 'Reminder berhasil ditambahkan.');
+            // Redirect ke halaman pertama tanpa parameter sort (default: created_at DESC)
+            // Ini memastikan data baru langsung terlihat di halaman pertama
+            return redirect()->route('admin.reminder')->with('success', 'Reminder berhasil ditambahkan.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Tangkap error duplicate entry dari UNIQUE constraint
+            if ($e->getCode() == 23000) { // SQLSTATE code untuk integrity constraint violation
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Tagihan dengan data yang sama sudah ada. Tidak bisa menambahkan data duplikat.');
+            }
+
+            // Error lainnya, throw ulang
+            throw $e;
+        }
     }
-
 
 
     /**
@@ -372,7 +384,7 @@ class AdminController extends Controller
         // Update nominal tagihan
         $upreminder->nominal_tagihan = $nominalTagihan;
 
-        // Update other fields
+        // Update other fields (nomor_kwitansi readonly di form, tapi tetap di-submit dengan value sama)
         $upreminder->update($request->except('nominal_tagihan'));
 
         // Cek apakah status pembayaran diubah menjadi Lunas atau Dibatalkan

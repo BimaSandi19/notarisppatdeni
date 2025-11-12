@@ -5,6 +5,33 @@ body,
     font-family: "Poppins", sans-serif !important;
 }
 
+/* Dropdown Active Item - Full Width Blue Background */
+.dropdown-item.active {
+    background-color: #0d6efd !important;
+    color: white !important;
+    width: 100%;
+    display: block;
+}
+
+.dropdown-item.active iconify-icon {
+    color: white !important;
+}
+
+/* Button Loading State */
+button[disabled] {
+    pointer-events: none !important;
+    opacity: 0.65;
+    cursor: not-allowed !important;
+}
+
+button[disabled] .btn-text {
+    display: none !important;
+}
+
+button[disabled] .spinner-border {
+    display: inline-block !important;
+}
+
 /* Badge Soft Colors for Status */
 .badge.bg-warning {
     background-color: #fff3cd !important;

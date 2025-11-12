@@ -68,7 +68,10 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-gold">Tambah</button>
+                    <button type="submit" class="btn btn-gold" id="btnTambahSubmit">
+                        <span class="btn-text">Tambah</span>
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -103,8 +106,11 @@
 
                             <div class="mb-3">
                                 <label for="nomor_kwitansi_edit" class="form-label">Nomor Kwitansi</label>
-                                <input type="text" class="form-control" id="nomor_kwitansi_edit" name="nomor_kwitansi"
-                                    required>
+                                <input type="text" class="form-control" id="nomor_kwitansi_edit"
+                                    style="cursor: not-allowed" disabled
+                                    title="Nomor kwitansi tidak dapat diubah setelah tagihan dibuat">
+                                <!-- Hidden input untuk submit form -->
+                                <input type="hidden" name="nomor_kwitansi" id="nomor_kwitansi_edit_hidden">
                             </div>
 
                             <div class="mb-3">
@@ -150,7 +156,10 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-gold">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-gold" id="btnEditSubmit">
+                        <span class="btn-text">Simpan Perubahan</span>
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
                 </div>
             </form>
         </div>

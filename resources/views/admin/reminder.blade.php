@@ -34,23 +34,25 @@
                             Urutkan & Saring
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sortDropdown">
-                            <li><a class="dropdown-item" href="{{ route('admin.reminder') }}">
-                                    <iconify-icon icon="mdi:refresh" width="16" height="16" class="me-1"></iconify-icon>
-                                    Tampilkan Semua (Reset)
+                            <li><a class="dropdown-item {{ !request('sort') ? 'active fw-bold' : '' }}"
+                                    href="{{ route('admin.reminder') }}">
+                                    <iconify-icon icon="mdi:clock-outline" width="16" height="16"
+                                        class="me-1 align-middle"></iconify-icon>
+                                    Data Terbaru Ditambahkan
                                 </a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item"
+                            <li><a class="dropdown-item {{ request('sort') === 'tanggal-desc' ? 'active fw-bold' : '' }}"
                                     href="{{ route('admin.reminder', ['sort' => 'tanggal-desc', 'q' => request('q')]) }}">Tanggal
                                     Jatuh Tempo (Terjauh)</a></li>
-                            <li><a class="dropdown-item"
+                            <li><a class="dropdown-item {{ request('sort') === 'tanggal-asc' ? 'active fw-bold' : '' }}"
                                     href="{{ route('admin.reminder', ['sort' => 'tanggal-asc', 'q' => request('q')]) }}">Tanggal
                                     Jatuh Tempo (Terdekat)</a></li>
-                            <li><a class="dropdown-item"
+                            <li><a class="dropdown-item {{ request('sort') === 'nominal-desc' ? 'active fw-bold' : '' }}"
                                     href="{{ route('admin.reminder', ['sort' => 'nominal-desc', 'q' => request('q')]) }}">Nominal
                                     Tagihan (Tertinggi)</a></li>
-                            <li><a class="dropdown-item"
+                            <li><a class="dropdown-item {{ request('sort') === 'nominal-asc' ? 'active fw-bold' : '' }}"
                                     href="{{ route('admin.reminder', ['sort' => 'nominal-asc', 'q' => request('q')]) }}">Nominal
                                     Tagihan (Terendah)</a></li>
                         </ul>
@@ -197,8 +199,41 @@
         @include('components.modalReminder')
     </div>
 
-    {{-- SweetAlert (jika dipakai) --}}
+    {{-- SweetAlert --}}
     @include('sweetalert::alert')
+
+    {{-- Manual Success Toast --}}
+    @if(session('success'))
+        <script>
+            // Fire immediately without waiting for DOMContentLoaded
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end',
+                timerProgressBar: true
+            });
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            // Fire immediately without waiting for DOMContentLoaded
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: '{{ session('error') }}',
+                timer: 3000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end',
+                timerProgressBar: true
+            });
+        </script>
+    @endif
 @endsection
 
 @include('components.admFooter')

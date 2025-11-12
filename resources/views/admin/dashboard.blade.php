@@ -126,8 +126,8 @@
                     <div
                         class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end order-2 sm:order-none mb-2">
                         <label for="yearSelect" class="text-muted text-sm">Tahun</label>
-                        <select id="yearSelect" class="form-select form-select-sm" title="Pilih Tahun" aria-label="Pilih Tahun"
-                            style="width: 120px; box-shadow: none; outline: none;">
+                        <select id="yearSelect" class="form-select form-select-sm" title="Pilih Tahun"
+                            aria-label="Pilih Tahun" style="width: 120px; box-shadow: none; outline: none;">
                             @foreach ($years as $y)
                                 <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
                             @endforeach

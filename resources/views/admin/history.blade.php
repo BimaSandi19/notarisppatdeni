@@ -34,29 +34,30 @@
                             Urutkan & Saring
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sortDropdown">
-                            <li><a class="dropdown-item" href="{{ route('admin.history') }}">
+                            <li><a class="dropdown-item {{ !request('status') && !request('sort') ? 'active fw-bold' : '' }}"
+                                    href="{{ route('admin.history') }}">
                                     <iconify-icon icon="mdi:refresh" width="16" height="16" class="me-1"></iconify-icon>
                                     Tampilkan Semua (Reset)
                                 </a></li>
-                            <li><a class="dropdown-item"
+                            <li><a class="dropdown-item {{ request('status') === 'Lunas' ? 'active fw-bold' : '' }}"
                                     href="{{ route('admin.history', ['status' => 'Lunas', 'q' => request('q'), 'sort' => request('sort')]) }}">Lunas</a>
                             </li>
-                            <li><a class="dropdown-item"
+                            <li><a class="dropdown-item {{ request('status') === 'Dibatalkan' ? 'active fw-bold' : '' }}"
                                     href="{{ route('admin.history', ['status' => 'Dibatalkan', 'q' => request('q'), 'sort' => request('sort')]) }}">Dibatalkan</a>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item"
+                            <li><a class="dropdown-item {{ request('sort') === 'tanggal-desc' ? 'active fw-bold' : '' }}"
                                     href="{{ route('admin.history', ['sort' => 'tanggal-desc', 'status' => request('status'), 'q' => request('q')]) }}">Tanggal
                                     (Terbaru - Terlama)</a></li>
-                            <li><a class="dropdown-item"
+                            <li><a class="dropdown-item {{ request('sort') === 'tanggal-asc' ? 'active fw-bold' : '' }}"
                                     href="{{ route('admin.history', ['sort' => 'tanggal-asc', 'status' => request('status'), 'q' => request('q')]) }}">Tanggal
                                     (Terlama - Terbaru)</a></li>
-                            <li><a class="dropdown-item"
+                            <li><a class="dropdown-item {{ request('sort') === 'nominal-desc' ? 'active fw-bold' : '' }}"
                                     href="{{ route('admin.history', ['sort' => 'nominal-desc', 'status' => request('status'), 'q' => request('q')]) }}">Nominal
                                     Tagihan (Tertinggi)</a></li>
-                            <li><a class="dropdown-item"
+                            <li><a class="dropdown-item {{ request('sort') === 'nominal-asc' ? 'active fw-bold' : '' }}"
                                     href="{{ route('admin.history', ['sort' => 'nominal-asc', 'status' => request('status'), 'q' => request('q')]) }}">Nominal
                                     Tagihan (Terendah)</a></li>
                         </ul>
