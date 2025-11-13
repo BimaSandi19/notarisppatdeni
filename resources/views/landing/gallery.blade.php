@@ -334,8 +334,8 @@
                                         dengan fitur-fitur yang responsif dan user-friendly.</p>
                                 </div>
                                 <div class="col-lg-7 col-sm-12">
-                                    <img src="../images/penyerahan1.jpeg" class="d-block w-100 carousel-gallery"
-                                        alt="...">
+                                    <img src="{{ asset('images/penyerahan1.jpeg') }}"
+                                        class="d-block w-100 carousel-gallery" alt="...">
                                 </div>
                             </div>
                         </div>
@@ -364,8 +364,8 @@
                                         meriahkan perayaan dengan semangat kebersamaan dan kegembiraan.</p>
                                 </div>
                                 <div class="col-lg-7 col-sm-12">
-                                    <img src="../images/kegiatan2.jpg" class="d-block w-100 carousel-gallery"
-                                        alt="...">
+                                    <img src="{{ asset('images/kegiatan2.jpg') }}"
+                                        class="d-block w-100 carousel-gallery" alt="...">
                                 </div>
                             </div>
                         </div>
@@ -387,7 +387,7 @@
         <div class="row mt-5">
             <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya1.JPG" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya1.JPG') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -403,7 +403,7 @@
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya8.jpeg" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya8.jpeg') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -419,7 +419,7 @@
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/penyerahan.jpeg" class="cardistry img-fluid">
+                    <img src="{{ asset('images/penyerahan1.jpeg') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -435,7 +435,7 @@
             </div>
             <div class="col-lg-6 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya3.JPG" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya3.JPG') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -451,7 +451,7 @@
             </div>
             <div class="col-lg-6 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya4.JPG" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya4.JPG') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -470,7 +470,7 @@
             {{-- border --}}
             <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya6.JPG" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya6.JPG') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -486,7 +486,7 @@
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya2.JPG" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya2.JPG') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -502,7 +502,7 @@
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya9.JPG" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya9.JPG') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -518,7 +518,7 @@
             </div>
             <div class="col-lg-6 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya5.JPG" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya5.JPG') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -534,7 +534,7 @@
             </div>
             <div class="col-lg-6 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya7.JPG" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya7.JPG') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -550,7 +550,7 @@
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya10.JPG" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya10.JPG') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -566,7 +566,7 @@
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya11.JPG" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya11.JPG') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>
@@ -582,7 +582,7 @@
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
                 <div class="card card-highlight w-auto">
-                    <img src="../images/lainnya12.JPG" class="cardistry img-fluid">
+                    <img src="{{ asset('images/lainnya12.JPG') }}" class="cardistry img-fluid">
                     <div class="hover-effect">
                         <div class="konten">
                             <span class="award">Dokumentasi</span>

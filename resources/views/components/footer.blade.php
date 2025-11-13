@@ -49,32 +49,29 @@
 <!-- Bootstrap Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-</script>
-<!-- Carousel JS -->
-<script src="assets\vendor\node_modules\owl-carousel\js\owl.carousel.min.js"></script>
-<!-- jquery -->
-<script src="assets\vendor\node_modules\jquery\dist\jquery.js"></script>
-<script src="assets\vendor\node_modules\jquery\dist\jquery.min.js"></script>
-<script src="assets\vendor\node_modules\jquery\src\jquery.js"></script>
+    </script>
 <script src="js/custom.js"></script>
 <script src="js/loader.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         @if (Session::has('success'))
             document.getElementById('preloader').style.display = 'none';
         @endif
     });
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         // Cek jika ada posisi scroll yang tersimpan
         if (sessionStorage.getItem("scrollPos")) {
             window.scrollTo(0, sessionStorage.getItem("scrollPos"));
             sessionStorage.removeItem("scrollPos");
         }
 
-        document.querySelector("form").addEventListener("submit", function() {
-            sessionStorage.setItem("scrollPos", window.scrollY);
-        });
+        var form = document.querySelector("form");
+        if (form) {
+            form.addEventListener("submit", function () {
+                sessionStorage.setItem("scrollPos", window.scrollY);
+            });
+        }
     });
 </script>
 

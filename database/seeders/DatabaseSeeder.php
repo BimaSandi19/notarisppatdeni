@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // ALWAYS seed admin user (diperlukan untuk login pertama kali di production)
         DB::table('users')->insert([
             'nama' => 'Admin Keuangan',
             'username' => 'keuangandn01',
@@ -23,9 +24,16 @@ class DatabaseSeeder extends Seeder
             'updated_at'     => now(),
         ]);
 
-        // Seed reminders after creating the admin user
-        if (class_exists(ReminderSeeder::class)) {
-            $this->call(ReminderSeeder::class);
+        // ONLY seed testing data in local/development environment
+        // Production harus mulai dengan data reminder & history KOSONG
+        if (app()->environment('local', 'testing')) {
+            if (class_exists(ReminderSeeder::class)) {
+                $this->call(ReminderSeeder::class);
+            }
+
+            if (class_exists(HistorySeeder::class)) {
+                $this->call(HistorySeeder::class);
+            }
         }
     }
 }
