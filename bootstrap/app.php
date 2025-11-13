@@ -11,6 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Trust proxies - untuk Sevalla/Load Balancer
+        $middleware->trustProxies(at: '*');
+        
         // Global middleware untuk keamanan
         $middleware->web(append: [
             \App\Http\Middleware\SanitizeInput::class,
