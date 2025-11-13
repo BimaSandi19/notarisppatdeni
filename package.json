@@ -11,7 +11,7 @@
         "husky": "^9.1.7",
         "laravel-vite-plugin": "^1.0",
         "prettier": "^3.6.2",
-        "vite": "^7.1.4"
+        "vite": "^6.0.0"
     },
     "dependencies": {
         "admin-lte": "3.2",
