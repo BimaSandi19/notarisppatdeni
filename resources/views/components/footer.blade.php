@@ -44,6 +44,12 @@
 </footer>
 <!-- *** Footer End *** -->
 
+<!-- Back to Top Button -->
+<button id="backToTop" title="Go to top">
+    <span class="iconify" data-icon="mdi:arrow-up" data-inline="true"></span>
+</button>
+<!-- Back to Top Button End -->
+
 
 
 <!-- Bootstrap Bundle -->
@@ -72,6 +78,28 @@
                 sessionStorage.setItem("scrollPos", window.scrollY);
             });
         }
+    });
+
+    // Back to Top Button Functionality
+    document.addEventListener("DOMContentLoaded", function () {
+        var backToTopBtn = document.getElementById("backToTop");
+
+        // Show button when user scrolls down 300px
+        window.addEventListener("scroll", function () {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.style.display = "flex";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        });
+
+        // Scroll to top when button is clicked
+        backToTopBtn.addEventListener("click", function () {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
     });
 </script>
 
