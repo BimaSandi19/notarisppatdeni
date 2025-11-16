@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - master   # atur branch yang di-deploy.
+      - master   # .atur branch yang di-deploy.
 
 jobs:
   deploy:
