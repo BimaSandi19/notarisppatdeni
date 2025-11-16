@@ -19,25 +19,35 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Prepare release directory locally
+      - name: Prepare known_hosts
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
-          mkdir -p release
-          rsync -av --exclude='.git' --exclude='node_modules' --exclude='vendor' ./ release/
-          # optionally run npm build locally here if you want to upload built assets
-      - name: Archive release
-        run: |
-          tar -czf release.tar.gz -C release .
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          # tambahkan host key agar ssh tidak prompt
+          ssh-keyscan -p "${SSH_PORT}" "${SSH_HOST}" >> ~/.ssh/known_hosts 2>/dev/null
+          chmod 644 ~/.ssh/known_hosts
 
-      - name: Upload release to server (rsync)
+      - name: Upload project to VPS (rsync)
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
           REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null
-          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "bash $REMOTE_APP_DIR/deploy.sh"
+          echo "Start rsync to ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}"
+          # rsync langsung overwrite ke REMOTE_APP_DIR, tapi mengecualikan file sensitif dan folder besar
+          rsync -avz --delete \
+            -e "ssh -p ${SSH_PORT}" \
+            --exclude=".git" \
+            --exclude=".env" \
+            --exclude="vendor" \
+            --exclude="node_modules" \
+            --exclude="storage/*.key" \
+            ./ \
+            ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}/
 
       - name: Run remote deploy script
         env:
@@ -46,4 +56,5 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
           REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
         run: |
-          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "bash $REMOTE_APP_DIR/deploy.sh"
+          echo "Run deploy.sh on remote server"
+          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "bash ${REMOTE_APP_DIR}/deploy.sh"
