@@ -130,19 +130,31 @@ done
 echo ""
 echo "🏥 Running health checks..."
 
-# Check if .env exists
-if [ ! -f ".env" ]; then
-    print_error ".env file not found!"
-    exit 1
-fi
-print_status ".env file exists"
+# Check if running in production (Sevalla uses environment variables, not .env file)
+if [ "$APP_ENV" = "production" ]; then
+    print_status "Running in production mode (environment variables from platform)"
+    
+    # Check if APP_KEY is set in environment
+    if [ -z "$APP_KEY" ]; then
+        print_error "APP_KEY environment variable not set!"
+        exit 1
+    fi
+    print_status "APP_KEY is configured"
+else
+    # In local/development, check .env file
+    if [ ! -f ".env" ]; then
+        print_error ".env file not found!"
+        exit 1
+    fi
+    print_status ".env file exists"
 
-# Check if APP_KEY is set
-if ! grep -q "APP_KEY=base64:" .env; then
-    print_error "APP_KEY not set in .env file!"
-    exit 1
+    # Check if APP_KEY is set
+    if ! grep -q "APP_KEY=base64:" .env; then
+        print_error "APP_KEY not set in .env file!"
+        exit 1
+    fi
+    print_status "APP_KEY is configured"
 fi
-print_status "APP_KEY is configured"
 
 # Check database connection
 php artisan db:show > /dev/null 2>&1 || {
