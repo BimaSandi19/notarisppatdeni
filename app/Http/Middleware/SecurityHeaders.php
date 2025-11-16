@@ -43,12 +43,12 @@ class SecurityHeaders
             $response->headers->set(
                 'Content-Security-Policy',
                 "default-src 'self'; " .
-                    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://code.iconify.design https://api.iconify.design https://api.unisvg.com https://api.simplesvg.com; " .
-                    "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; " .
-                    "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; " .
+                    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://code.iconify.design https://api.iconify.design https://api.unisvg.com https://api.simplesvg.com; " .
+                    "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; " .
+                    "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " .
                     "img-src 'self' data: https: blob:; " .
                     "frame-src 'self' https://www.google.com https://maps.google.com; " .
-                    "connect-src 'self' https://api.iconify.design https://api.unisvg.com https://api.simplesvg.com https://cdn.jsdelivr.net;"
+                    "connect-src 'self' https://api.iconify.design https://api.unisvg.com https://api.simplesvg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com;"
             );
         }
 
