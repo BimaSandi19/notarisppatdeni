@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\History;
 use App\Models\Reminder;
-use App\Jobs\SendTelegramReminder;
 use Illuminate\Http\Request;
 use App\Events\ReminderSaved;
 use Illuminate\Support\Facades\DB;
