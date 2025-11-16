@@ -43,7 +43,7 @@ print_status "Composer dependencies installed"
 # Step 2: Install NPM Dependencies
 echo ""
 echo "📦 Installing NPM dependencies..."
-npm ci --omit=dev || {
+npm ci || {
     print_error "NPM install failed"
     exit 1
 }
