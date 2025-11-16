@@ -1,0 +1,48 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - master   # atur branch yang di-deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Prepare release directory locally
+        run: |
+          mkdir -p release
+          rsync -av --exclude='.git' --exclude='node_modules' --exclude='vendor' ./ release/
+          # optionally run npm build locally here if you want to upload built assets
+      - name: Archive release
+        run: |
+          tar -czf release.tar.gz -C release .
+
+      - name: Upload release to server (rsync)
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
+        run: |
+          # gunakan rsync over ssh (menggunakan ssh-agent)
+          rsync -avz -e "ssh -p $SSH_PORT" --delete release/ $SSH_USER@$SSH_HOST:$REMOTE_APP_DIR/release/
+
+      - name: Run remote deploy script
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
+        run: |
+          ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "bash $REMOTE_APP_DIR/deploy.sh"
