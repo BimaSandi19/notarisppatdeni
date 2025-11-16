@@ -77,7 +77,13 @@ php artisan migrate --force || {
 }
 print_status "Database migrations completed"
 
-# Step 6: Create Storage Link
+# Step 6: Seed Database (for admin user)
+echo ""
+echo "🌱 Seeding database..."
+php artisan db:seed --force || print_warning "Seeding failed or already seeded"
+print_status "Database seeded"
+
+# Step 7: Create Storage Link
 echo ""
 echo "🔗 Creating storage symlink..."
 php artisan storage:link || print_warning "Storage link may already exist"
