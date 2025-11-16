@@ -86,7 +86,25 @@ class AuthController extends Controller
             'email' => 'required|email:rfc,dns',
         ]);
 
-        $status = Password::sendResetLink($credentials);
+        try {
+            $status = Password::sendResetLink($credentials);
+            
+            \Log::info('Password reset link sent', [
+                'email' => $credentials['email'],
+                'status' => $status
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Password reset failed', [
+                'email' => $credentials['email'],
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // For debugging (comment out in production)
+            if (config('app.debug')) {
+                return back()->withErrors(['email' => 'Error: ' . $e->getMessage()]);
+            }
+        }
 
         // Selalu tampilkan pesan sukses (jangan kasih tahu email exist atau tidak - security best practice)
         return back()->with('status', 'Kami telah mengirimkan link reset password ke email Anda (jika email terdaftar).');
