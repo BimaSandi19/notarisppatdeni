@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rules;
 
@@ -88,18 +89,18 @@ class AuthController extends Controller
 
         try {
             $status = Password::sendResetLink($credentials);
-            
-            \Log::info('Password reset link sent', [
+
+            Log::info('Password reset link sent', [
                 'email' => $credentials['email'],
                 'status' => $status
             ]);
         } catch (\Exception $e) {
-            \Log::error('Password reset failed', [
+            Log::error('Password reset failed', [
                 'email' => $credentials['email'],
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             // For debugging (comment out in production)
             if (config('app.debug')) {
                 return back()->withErrors(['email' => 'Error: ' . $e->getMessage()]);
