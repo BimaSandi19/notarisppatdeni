@@ -38,18 +38,28 @@ jobs:
           REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
         run: |
           echo "Start rsync to ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}"
-          # rsync langsung overwrite ke REMOTE_APP_DIR, tapi mengecualikan file sensitif dan folder besar
-          rsync -avz --delete \
+          # Fix permissions before rsync
+          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+            "sudo chown -R ${SSH_USER}:${SSH_USER} ${REMOTE_APP_DIR} 2>/dev/null || true"
+
+          # rsync dengan exclude sensitive files
+          rsync -avz \
             -e "ssh -p ${SSH_PORT}" \
             --exclude=".git" \
             --exclude=".env" \
             --exclude="vendor" \
             --exclude="node_modules" \
             --exclude="storage/*.key" \
-            --include="setup-database.sh" \
-            --include="DATABASE-SETUP-GUIDE.md" \
+            --exclude="storage/logs/*" \
+            --exclude=".DS_Store" \
+            --exclude="*.tmp" \
+            --delete-excluded \
             ./ \
             ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}/
+
+          # Fix permissions after rsync
+          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+            "sudo chown -R www-data:www-data ${REMOTE_APP_DIR}"
 
       - name: Ensure .env exists on VPS
         env:
