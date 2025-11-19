@@ -38,11 +38,16 @@ jobs:
           REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
         run: |
           echo "Start rsync to ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}"
+          
+          # Remove node_modules di VPS sebelum rsync
+          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+            "rm -rf ${REMOTE_APP_DIR}/node_modules 2>/dev/null || true"
+          
           # Fix permissions before rsync
           ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
             "sudo chown -R ${SSH_USER}:${SSH_USER} ${REMOTE_APP_DIR} 2>/dev/null || true"
 
-          # rsync dengan exclude sensitive files
+          # rsync dengan exclude sensitive files dan node_modules
           rsync -avz \
             -e "ssh -p ${SSH_PORT}" \
             --exclude=".git" \
@@ -53,14 +58,12 @@ jobs:
             --exclude="storage/logs/*" \
             --exclude=".DS_Store" \
             --exclude="*.tmp" \
-            --delete-excluded \
             ./ \
             ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}/
-
+          
           # Fix permissions after rsync
           ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
-            "sudo chown -R www-data:www-data ${REMOTE_APP_DIR}"
-
+            "sudo chown -R www-data:www-data ${REMOTE_APP_DIR}"      
       - name: Ensure .env exists on VPS
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
