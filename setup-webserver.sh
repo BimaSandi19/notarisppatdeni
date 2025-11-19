@@ -40,7 +40,7 @@ echo ""
 
 DOMAIN="https://notarisdeni.web.id"
 
-read -p "Application directory [/var/www/notaris_ppat_den]: " APP_DIR
+read -p "Application directory [/var/www/notaris_ppat_deni]: " APP_DIR
 APP_DIR=${APP_DIR:-/var/www/notaris_ppat_deni}
 
 read -p "Server name (for Nginx config) [notaris-ppat]: " SERVER_NAME
