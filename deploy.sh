@@ -47,7 +47,7 @@ echo ""
 # ========================================
 echo "🔐 Step 2: Fixing permissions for deployment..."
 
-# Fix permissions so www-data can write during installation
+# Fix permissions so www-data can write during installation.
 sudo chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
 sudo chmod -R 775 storage bootstrap/cache 2>/dev/null || true
 
