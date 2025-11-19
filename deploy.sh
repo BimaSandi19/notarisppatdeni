@@ -45,13 +45,12 @@ echo ""
 # ========================================
 # 2. FIX PERMISSIONS EARLY
 # ========================================
-echo "🔐 Step 2: Fixing permissions for deployment..."
+echo "🔐 Step 2: Ensuring proper permissions..."
 
-# Fix permissions so www-data can write during installation.
-sudo chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
-sudo chmod -R 775 storage bootstrap/cache 2>/dev/null || true
+# Make sure storage and bootstrap/cache are writable
+chmod -R 775 storage bootstrap/cache 2>/dev/null || true
 
-echo "✅ Permissions fixed"
+echo "✅ Permissions checked"
 echo ""
 
 # ========================================
@@ -190,9 +189,8 @@ if [ ! -L "public/storage" ]; then
     echo "✅ Storage linked"
 fi
 
-# Final permission fix
-sudo chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
-sudo chmod -R 775 storage bootstrap/cache 2>/dev/null || true
+# Final permission fix for storage and bootstrap/cache (no sudo needed)
+chmod -R 775 storage bootstrap/cache 2>/dev/null || true
 echo "✅ Permissions verified"
 
 echo ""
