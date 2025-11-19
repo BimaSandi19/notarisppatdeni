@@ -43,9 +43,26 @@ echo "✅ Environment check passed"
 echo ""
 
 # ========================================
-# 2. DEPENDENCIES INSTALLATION
+# 2. CREATE REQUIRED DIRECTORIES
 # ========================================
-echo "📦 Step 2: Installing dependencies..."
+echo "📁 Step 2: Creating required directories..."
+
+# Ensure storage directories exist
+mkdir -p storage/app/public
+mkdir -p storage/framework/cache/data
+mkdir -p storage/framework/sessions
+mkdir -p storage/framework/testing
+mkdir -p storage/framework/views
+mkdir -p storage/logs
+mkdir -p bootstrap/cache
+
+echo "✅ Required directories created"
+echo ""
+
+# ========================================
+# 3. DEPENDENCIES INSTALLATION
+# ========================================
+echo "📦 Step 3: Installing dependencies..."
 
 # Check if composer is available
 if command -v composer &> /dev/null; then
@@ -68,9 +85,9 @@ fi
 echo ""
 
 # ========================================
-# 3. BUILD ASSETS
+# 4. BUILD ASSETS
 # ========================================
-echo "🔨 Step 3: Building production assets..."
+echo "🔨 Step 4: Building production assets..."
 
 if command -v npm &> /dev/null; then
     if [ -f "package.json" ]; then
@@ -90,9 +107,9 @@ fi
 echo ""
 
 # ========================================
-# 4. ENVIRONMENT SETUP
+# 5. ENVIRONMENT SETUP
 # ========================================
-echo "⚙️  Step 4: Setting up environment..."
+echo "⚙️  Step 5: Setting up environment..."
 
 # Check if .env exists
 if [ ! -f ".env" ]; then
@@ -120,18 +137,18 @@ fi
 echo ""
 
 # ========================================
-# 5. DATABASE MIGRATION
+# 6. DATABASE MIGRATION
 # ========================================
-echo "🗄️  Step 5: Running database migrations..."
+echo "🗄️  Step 6: Running database migrations..."
 
 php artisan migrate --force
 echo "✅ Migrations completed"
 echo ""
 
 # ========================================
-# 6. DATABASE SEEDING (Production-safe)
+# 7. DATABASE SEEDING (Production-safe)
 # ========================================
-echo "🌱 Step 6: Seeding database..."
+echo "🌱 Step 7: Seeding database..."
 
 # Only seed if explicitly requested or first deployment
 if [ "$1" == "--seed" ]; then
@@ -145,9 +162,9 @@ fi
 echo ""
 
 # ========================================
-# 7. OPTIMIZATION
+# 8. OPTIMIZATION
 # ========================================
-echo "⚡ Step 7: Optimizing application..."
+echo "⚡ Step 8: Optimizing application..."
 
 # Clear all caches
 php artisan optimize:clear
@@ -167,9 +184,9 @@ echo "✅ Views cached"
 echo ""
 
 # ========================================
-# 8. STORAGE & PERMISSIONS
+# 9. STORAGE & PERMISSIONS
 # ========================================
-echo "🔐 Step 8: Setting permissions..."
+echo "🔐 Step 9: Setting permissions..."
 
 # Create storage symlink if needed
 if [ ! -L "public/storage" ]; then
@@ -193,9 +210,9 @@ fi
 echo ""
 
 # ========================================
-# 9. CLEANUP
+# 10. CLEANUP
 # ========================================
-echo "🧹 Step 9: Cleaning up..."
+echo "🧹 Step 10: Cleaning up..."
 
 # Remove node_modules to save space (optional)
 if [ "$2" == "--cleanup" ]; then
@@ -209,9 +226,9 @@ fi
 echo ""
 
 # ========================================
-# 10. VERIFICATION
+# 11. VERIFICATION
 # ========================================
-echo "✅ Step 10: Verifying deployment..."
+echo "✅ Step 11: Verifying deployment..."
 
 # Check if key routes exist
 php artisan route:list --path=admin/dashboard > /dev/null 2>&1
