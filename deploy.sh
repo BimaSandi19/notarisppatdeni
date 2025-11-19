@@ -94,15 +94,22 @@ echo ""
 # ========================================
 echo "⚙️  Step 4: Setting up environment..."
 
-# Copy .env.production to .env if .env doesn't exist
-if [ ! -f ".env" ] && [ -f ".env.production" ]; then
-    echo "Copying .env.production to .env..."
-    cp .env.production .env
-    echo "⚠️  Remember to edit .env with production credentials!"
+# Check if .env exists
+if [ ! -f ".env" ]; then
+    if [ -f ".env.production" ]; then
+        echo "Copying .env.production to .env..."
+        cp .env.production .env
+        echo "✅ .env file created from .env.production"
+    else
+        echo "❌ Error: No .env file found and no .env.production to copy from!"
+        echo "Please create a .env file on the server with production settings."
+        echo "You can create it manually or upload .env.example as .env and configure it."
+        exit 1
+    fi
 fi
 
 # Generate application key if not set
-if ! grep -q "APP_KEY=base64:" .env; then
+if ! grep -q "APP_KEY=base64:" .env 2>/dev/null; then
     echo "Generating application key..."
     php artisan key:generate --force
     echo "✅ Application key generated"

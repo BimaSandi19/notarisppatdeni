@@ -46,8 +46,26 @@ jobs:
             --exclude="vendor" \
             --exclude="node_modules" \
             --exclude="storage/*.key" \
+            --include="setup-database.sh" \
+            --include="DATABASE-SETUP-GUIDE.md" \
             ./ \
             ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}/
+
+      - name: Ensure .env exists on VPS
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
+        run: |
+          echo "Checking if .env exists on VPS..."
+          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+            "if [ ! -f ${REMOTE_APP_DIR}/.env ]; then \
+              echo 'Creating .env from .env.example...'; \
+              cp ${REMOTE_APP_DIR}/.env.example ${REMOTE_APP_DIR}/.env 2>/dev/null || echo 'Warning: .env.example not found'; \
+            else \
+              echo '.env file already exists'; \
+            fi"
 
       - name: Run remote deploy script
         env:
