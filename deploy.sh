@@ -58,8 +58,8 @@ fi
 
 # Check if npm is available
 if command -v npm &> /dev/null; then
-    echo "Installing Node.js dependencies..."
-    npm ci --omit=dev --silent
+    echo "Installing Node.js dependencies (including dev for build)..."
+    npm ci --silent
     echo "✅ Node.js dependencies installed"
 else
     echo "⚠️  Warning: npm not found. Skipping Node dependencies."
@@ -77,6 +77,11 @@ if command -v npm &> /dev/null; then
         echo "Running Vite build..."
         npm run build
         echo "✅ Assets built successfully"
+        
+        # Prune dev dependencies after build to save space
+        echo "Removing dev dependencies..."
+        npm prune --omit=dev --silent
+        echo "✅ Dev dependencies removed"
     fi
 else
     echo "⚠️  Skipping asset build (npm not available)"
