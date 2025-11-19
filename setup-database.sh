@@ -182,7 +182,7 @@ fi
 echo ""
 
 # ========================================
-# 6. CONFIGURE .ENV FILE
+# 6. CONFIGURE .ENV FILE.
 # ========================================
 echo "⚙️  Step 6: Configuring .env file..."
 
