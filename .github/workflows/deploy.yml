@@ -50,11 +50,6 @@ jobs:
             ./ \
             ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}/
 
-          # # Fix permissions for web server (tetap perlu sudo untuk chown ke www-data)
-          # ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
-          #   "sudo chown -R www-data:www-data ${REMOTE_APP_DIR} && \
-          #    sudo chmod -R 755 ${REMOTE_APP_DIR} && \
-          #    sudo chmod -R 775 ${REMOTE_APP_DIR}/storage ${REMOTE_APP_DIR}/bootstrap/cache"
       - name: Ensure .env exists on VPS
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
@@ -80,13 +75,4 @@ jobs:
         run: |
           echo "Run deploy.sh on remote server"
           ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "cd ${REMOTE_APP_DIR} && bash deploy.sh"
-
-      # - name: Restart services
-      #   env:
-      #     SSH_USER: ${{ secrets.SSH_USER }}
-      #     SSH_HOST: ${{ secrets.SSH_HOST }}
-      #     SSH_PORT: ${{ secrets.SSH_PORT }}
-      #   run: |
-      #     echo "Restarting PHP-FPM and Nginx..."
-      #     ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
-      #       "sudo systemctl restart php8.3-fpm && sudo systemctl restart nginx && echo '✅ Services restarted successfully'"
+          
