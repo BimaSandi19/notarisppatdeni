@@ -43,20 +43,15 @@ echo "✅ Environment check passed"
 echo ""
 
 # ========================================
-# 2. CREATE REQUIRED DIRECTORIES
+# 2. FIX PERMISSIONS EARLY
 # ========================================
-echo "📁 Step 2: Creating required directories..."
+echo "🔐 Step 2: Fixing permissions for deployment..."
 
-# Ensure storage directories exist
-mkdir -p storage/app/public
-mkdir -p storage/framework/cache/data
-mkdir -p storage/framework/sessions
-mkdir -p storage/framework/testing
-mkdir -p storage/framework/views
-mkdir -p storage/logs
-mkdir -p bootstrap/cache
+# Fix permissions so www-data can write during installation
+sudo chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
+sudo chmod -R 775 storage bootstrap/cache 2>/dev/null || true
 
-echo "✅ Required directories created"
+echo "✅ Permissions fixed"
 echo ""
 
 # ========================================
@@ -186,7 +181,7 @@ echo ""
 # ========================================
 # 9. STORAGE & PERMISSIONS
 # ========================================
-echo "🔐 Step 9: Setting permissions..."
+echo "🔐 Step 9: Final permission check..."
 
 # Create storage symlink if needed
 if [ ! -L "public/storage" ]; then
@@ -194,18 +189,10 @@ if [ ! -L "public/storage" ]; then
     echo "✅ Storage linked"
 fi
 
-# Set permissions (if running as root or with sudo)
-if [ "$EUID" -eq 0 ]; then
-    echo "Setting directory permissions..."
-    chown -R www-data:www-data storage bootstrap/cache public
-    chmod -R 775 storage bootstrap/cache
-    echo "✅ Permissions set"
-else
-    echo "Setting directory permissions..."
-    chmod -R 775 storage bootstrap/cache
-    echo "✅ Permissions set (ownership requires sudo)"
-    echo "ℹ️  For full permissions, run: sudo chown -R www-data:www-data storage bootstrap/cache public"
-fi
+# Final permission fix
+sudo chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
+sudo chmod -R 775 storage bootstrap/cache 2>/dev/null || true
+echo "✅ Permissions verified"
 
 echo ""
 
