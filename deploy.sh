@@ -43,26 +43,14 @@ echo "✅ Environment check passed"
 echo ""
 
 # ========================================
-# 2. FIX PERMISSIONS EARLY
+# 2. DEPENDENCIES INSTALLATION
 # ========================================
-echo "🔐 Step 2: Ensuring proper permissions..."
-
-# Make sure storage and bootstrap/cache are writable
-chmod -R 775 storage bootstrap/cache 2>/dev/null || true
-
-echo "✅ Permissions checked"
-echo ""
-
-# ========================================
-# 3. DEPENDENCIES INSTALLATION
-# ========================================
-echo "📦 Step 3: Installing dependencies..."
+echo "📦 Step 2: Installing dependencies..."
 
 # Check if composer is available
 if command -v composer &> /dev/null; then
     echo "Installing PHP dependencies..."
-    # Run composer directly (folder should be owned by deploy user or www-data with 775 perms)
-    composer install --optimize-autoloader --no-dev --no-interaction 2>&1 || true
+    composer install --optimize-autoloader --no-dev --no-interaction
     echo "✅ PHP dependencies installed"
 else
     echo "⚠️  Warning: Composer not found. Skipping PHP dependencies."
@@ -80,9 +68,9 @@ fi
 echo ""
 
 # ========================================
-# 4. BUILD ASSETS
+# 3. BUILD ASSETS
 # ========================================
-echo "🔨 Step 4: Building production assets..."
+echo "🔨 Step 3: Building production assets..."
 
 if command -v npm &> /dev/null; then
     if [ -f "package.json" ]; then
@@ -102,9 +90,9 @@ fi
 echo ""
 
 # ========================================
-# 5. ENVIRONMENT SETUP
+# 4. ENVIRONMENT SETUP
 # ========================================
-echo "⚙️  Step 5: Setting up environment..."
+echo "⚙️  Step 4: Setting up environment..."
 
 # Check if .env exists
 if [ ! -f ".env" ]; then
@@ -115,7 +103,6 @@ if [ ! -f ".env" ]; then
     else
         echo "❌ Error: No .env file found and no .env.production to copy from!"
         echo "Please create a .env file on the server with production settings."
-        echo "You can create it manually or upload .env.example as .env and configure it."
         exit 1
     fi
 fi
@@ -132,22 +119,21 @@ fi
 echo ""
 
 # ========================================
-# 6. DATABASE MIGRATION
+# 5. DATABASE MIGRATION
 # ========================================
-echo "🗄️  Step 6: Running database migrations..."
+echo "🗄️  Step 5: Running database migrations..."
 
 php artisan migrate --force
 echo "✅ Migrations completed"
 echo ""
 
 # ========================================
-# 7. DATABASE SEEDING (Production-safe)
+# 6. DATABASE SEEDING (Production-safe)
 # ========================================
-echo "🌱 Step 7: Seeding database..."
+echo "🌱 Step 6: Seeding database..."
 
-# Only seed if explicitly requested or first deployment
 if [ "$1" == "--seed" ]; then
-    echo "Seeding database (admin user only in production)..."
+    echo "Seeding database..."
     php artisan db:seed --force
     echo "✅ Database seeded"
 else
@@ -157,50 +143,41 @@ fi
 echo ""
 
 # ========================================
-# 8. OPTIMIZATION
+# 7. OPTIMIZATION
 # ========================================
-echo "⚡ Step 8: Optimizing application..."
+echo "⚡ Step 7: Optimizing application..."
 
-# Clear all caches
 php artisan optimize:clear
-
-# Cache configuration
 php artisan config:cache
 echo "✅ Config cached"
 
-# Cache routes
 php artisan route:cache
 echo "✅ Routes cached"
 
-# Cache views
 php artisan view:cache
 echo "✅ Views cached"
 
 echo ""
 
 # ========================================
-# 9. STORAGE & PERMISSIONS
+# 8. STORAGE SYMLINK
 # ========================================
-echo "🔐 Step 9: Final permission check..."
+echo "🔗 Step 8: Setting up storage symlink..."
 
-# Create storage symlink if needed
 if [ ! -L "public/storage" ]; then
     php artisan storage:link
     echo "✅ Storage linked"
+else
+    echo "✅ Storage symlink already exists"
 fi
-
-# Final permission fix for storage and bootstrap/cache (no sudo needed)
-chmod -R 775 storage bootstrap/cache 2>/dev/null || true
-echo "✅ Permissions verified"
 
 echo ""
 
 # ========================================
-# 10. CLEANUP
+# 9. CLEANUP
 # ========================================
-echo "🧹 Step 10: Cleaning up..."
+echo "🧹 Step 9: Cleaning up..."
 
-# Remove node_modules to save space (optional)
 if [ "$2" == "--cleanup" ]; then
     if [ -d "node_modules" ]; then
         echo "Removing node_modules..."
@@ -212,11 +189,10 @@ fi
 echo ""
 
 # ========================================
-# 11. VERIFICATION
+# 10. VERIFICATION
 # ========================================
-echo "✅ Step 11: Verifying deployment..."
+echo "✅ Step 10: Verifying deployment..."
 
-# Check if key routes exist
 php artisan route:list --path=admin/dashboard > /dev/null 2>&1
 if [ $? -eq 0 ]; then
     echo "✅ Application routes verified"
@@ -224,7 +200,6 @@ else
     echo "⚠️  Warning: Could not verify routes"
 fi
 
-# Check if migrations are up to date
 PENDING_MIGRATIONS=$(php artisan migrate:status | grep "Pending" | wc -l)
 if [ "$PENDING_MIGRATIONS" -eq 0 ]; then
     echo "✅ All migrations applied"
@@ -242,16 +217,13 @@ echo "✅ DEPLOYMENT COMPLETE!"
 echo "=========================================="
 echo ""
 echo "📋 Next Steps:"
-echo "   1. Visit your website URL"
-echo "   2. Test login with admin credentials"
-echo "   3. Verify all features working"
-echo "   4. Setup cron job for scheduler:"
-echo "      * * * * * cd $(pwd) && php artisan schedule:run >> /dev/null 2>&1"
+echo "   1. Check website at your domain"
+echo "   2. Test login functionality"
+echo "   3. Verify history & reminder pages"
 echo ""
-echo "📝 Post-Deployment Commands:"
+echo "📝 Useful Commands:"
 echo "   - View logs: tail -f storage/logs/laravel.log"
 echo "   - Clear cache: php artisan optimize:clear"
-echo "   - Run queue: php artisan queue:work"
 echo ""
-echo "🎉 Happy deploying!"
+echo "🎉 Deployment successful!"
 echo "=========================================="

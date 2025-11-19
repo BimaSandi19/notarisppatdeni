@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - master # .atur branch yang, di-deploy.
+      - master
 
 jobs:
   deploy:
@@ -26,7 +26,6 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          # tambahkan host key agar ssh tidak prompt
           ssh-keyscan -p "${SSH_PORT}" "${SSH_HOST}" >> ~/.ssh/known_hosts 2>/dev/null
           chmod 644 ~/.ssh/known_hosts
 
@@ -37,11 +36,8 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
           REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
         run: |
-          echo "Start rsync to ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}"
-
-          # rsync with --no-perms --no-owner --no-group to avoid permission issues
+          echo "Uploading files to VPS..."
           rsync -avz --delete \
-            --no-perms --no-owner --no-group \
             -e "ssh -p ${SSH_PORT}" \
             --exclude=".git" \
             --exclude=".env" \
@@ -51,38 +47,7 @@ jobs:
             --exclude="storage" \
             --exclude="bootstrap/cache/*" \
             ./ \
-            ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}/ || echo "Rsync completed with warnings (ignored)"
-
-      - name: Ensure .env exists on VPS
-        env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
-          REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
-        run: |
-          echo "Checking if .env exists on VPS..."
-          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
-            "if [ ! -f ${REMOTE_APP_DIR}/.env ]; then \
-              echo 'Creating .env from .env.example...'; \
-              cp ${REMOTE_APP_DIR}/.env.example ${REMOTE_APP_DIR}/.env 2>/dev/null || echo 'Warning: .env.example not found'; \
-            else \
-              echo '.env file already exists'; \
-            fi"
-
-      - name: Fix permissions before deploy
-        env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
-          REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
-        run: |
-          echo "Fixing permissions before running deploy script..."
-          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
-            "cd ${REMOTE_APP_DIR} && \
-            sudo chown -R ${SSH_USER}:${SSH_USER} . && \
-            sudo chmod -R 755 . && \
-            sudo chmod -R 775 storage bootstrap/cache && \
-            echo '✅ Pre-deploy permissions set'"
+            ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}/
 
       - name: Run remote deploy script
         env:
@@ -91,21 +56,18 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
           REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
         run: |
-          echo "Run deploy.sh on remote server"
           ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "cd ${REMOTE_APP_DIR} && bash deploy.sh"
 
-      - name: Fix permissions and restart services
+      - name: Fix permissions and restart
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
           REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
         run: |
-          echo "Fixing permissions and restarting services..."
           ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
             "cd ${REMOTE_APP_DIR} && \
             sudo chown -R www-data:www-data storage bootstrap/cache && \
             sudo chmod -R 775 storage bootstrap/cache && \
             sudo systemctl restart php8.3-fpm && \
-            sudo systemctl restart nginx && \
-            echo '✅ Deployment completed successfully!'"
+            sudo systemctl restart nginx"
