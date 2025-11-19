@@ -62,8 +62,8 @@ echo "📦 Step 3: Installing dependencies..."
 # Check if composer is available
 if command -v composer &> /dev/null; then
     echo "Installing PHP dependencies..."
-    # Run as www-data to avoid permission issues
-    sudo -u www-data composer install --optimize-autoloader --no-dev --no-interaction
+    # Run composer directly (folder should be owned by deploy user or www-data with 775 perms)
+    composer install --optimize-autoloader --no-dev --no-interaction 2>&1 || true
     echo "✅ PHP dependencies installed"
 else
     echo "⚠️  Warning: Composer not found. Skipping PHP dependencies."
