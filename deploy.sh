@@ -180,11 +180,14 @@ fi
 # Set permissions (if running as root or with sudo)
 if [ "$EUID" -eq 0 ]; then
     echo "Setting directory permissions..."
+    chown -R www-data:www-data storage bootstrap/cache public
     chmod -R 775 storage bootstrap/cache
     echo "✅ Permissions set"
 else
-    echo "ℹ️  Run with sudo to set permissions automatically"
-    echo "   Or manually run: chmod -R 775 storage bootstrap/cache"
+    echo "Setting directory permissions..."
+    chmod -R 775 storage bootstrap/cache
+    echo "✅ Permissions set (ownership requires sudo)"
+    echo "ℹ️  For full permissions, run: sudo chown -R www-data:www-data storage bootstrap/cache public"
 fi
 
 echo ""
