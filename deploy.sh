@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ========================================
-# 🚀 UNIVERSAL LARAVEL DEPLOYMENT SCRIPT
+# 🚀 UNIVERSAL LARAVEL DEPLOYMENT SCRIPT.
 # ========================================
 # Project: Sistem Manajemen Tagihan Notaris PPAT
 # Author: BimaSandi19
