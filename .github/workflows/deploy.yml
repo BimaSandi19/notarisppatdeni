@@ -75,4 +75,21 @@ jobs:
         run: |
           echo "Run deploy.sh on remote server"
           ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "cd ${REMOTE_APP_DIR} && bash deploy.sh"
-          
+
+      - name: Fix permissions and restart services
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
+        run: |
+          echo "Fixing storage and cache directory permissions..."
+          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+            "cd ${REMOTE_APP_DIR} && \
+            sudo chown -R www-data:www-data storage bootstrap/cache && \
+            sudo chmod -R 775 storage bootstrap/cache && \
+            php artisan cache:clear && \
+            php artisan view:clear && \
+            sudo systemctl restart php8.3-fpm && \
+            sudo systemctl restart nginx && \
+            echo 'Permission fix and service restart completed'"
