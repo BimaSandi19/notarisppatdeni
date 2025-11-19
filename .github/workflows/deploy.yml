@@ -30,6 +30,18 @@ jobs:
           ssh-keyscan -p "${SSH_PORT}" "${SSH_HOST}" >> ~/.ssh/known_hosts 2>/dev/null
           chmod 644 ~/.ssh/known_hosts
 
+      - name: Prepare directory for rsync
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
+        run: |
+          echo "Setting temporary ownership for rsync..."
+          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+            "sudo chown -R ${SSH_USER}:${SSH_USER} ${REMOTE_APP_DIR} && \
+             echo 'Ownership changed to ${SSH_USER}'"
+
       - name: Upload project to VPS (rsync)
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
