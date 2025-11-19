@@ -39,14 +39,7 @@ jobs:
         run: |
           echo "Start rsync to ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}"
 
-          # Backup current app, then clean directory
-          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
-            "if [ -d ${REMOTE_APP_DIR} ]; then \
-              sudo rm -rf ${REMOTE_APP_DIR}/* ${REMOTE_APP_DIR}/.* 2>/dev/null || true; \
-              sudo chown -R ${SSH_USER}:${SSH_USER} ${REMOTE_APP_DIR}; \
-            fi"
-
-          # rsync fresh copy
+          # rsync fresh copy (user sudah owner, tidak perlu sudo)
           rsync -avz --delete \
             -e "ssh -p ${SSH_PORT}" \
             --exclude=".git" \
@@ -57,7 +50,7 @@ jobs:
             ./ \
             ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}/
 
-          # Fix permissions for web server
+          # Fix permissions for web server (tetap perlu sudo untuk chown ke www-data)
           ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
             "sudo chown -R www-data:www-data ${REMOTE_APP_DIR} && \
              sudo chmod -R 755 ${REMOTE_APP_DIR} && \
