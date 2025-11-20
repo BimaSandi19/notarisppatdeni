@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use faker\Factory as Faker;
 
 class ReminderSeeder extends Seeder
 {
@@ -13,7 +14,7 @@ class ReminderSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = \Faker\Factory::create('id_ID');
+        $faker = Faker::create('id_ID');
 
         $keteranganPending = [
             'Menunggu konfirmasi pembayaran.',
