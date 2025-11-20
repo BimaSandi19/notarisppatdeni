@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
 
         // ONLY seed testing data in local/development environment
         // Production harus mulai dengan data reminder & history KOSONG
-        if (app()->environment('local', 'testing')) {
+        if (app()->environment('local', 'testing', 'dev')) {
             if (class_exists(ReminderSeeder::class)) {
                 $this->call(ReminderSeeder::class);
             }
