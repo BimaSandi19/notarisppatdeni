@@ -37,7 +37,7 @@ jobs:
           REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
         run: |
           echo "Uploading files to VPS..."
-          rsync -avz --delete --ignore-errors \
+          rsync -avz --ignore-errors --no-perms --no-owner --no-group \
             -e "ssh -p ${SSH_PORT}" \
             --exclude=".git" \
             --exclude=".env" \
@@ -45,7 +45,7 @@ jobs:
             --exclude="node_modules" \
             --exclude=".DS_Store" \
             --exclude="storage" \
-            --exclude="bootstrap/cache/*" \
+            --exclude="bootstrap/cache" \
             ./ \
             ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}/ || true
 
