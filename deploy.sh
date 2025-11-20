@@ -43,20 +43,9 @@ echo "✅ Environment check passed"
 echo ""
 
 # ========================================
-# 3. PUBLISH VENDOR ASSETS
+# 3. DEPENDENCIES INSTALLATION
 # ========================================
-echo "📦 Step 3: Publishing vendor assets..."
-
-# Publish Laravel pagination views
-php artisan vendor:publish --tag=laravel-pagination --force 2>/dev/null || true
-
-echo "✅ Vendor assets published"
-echo ""
-
-# ========================================
-# 4. DEPENDENCIES INSTALLATION
-# ========================================
-echo "📦 Step 4: Installing dependencies..."
+echo "📦 Step 3: Installing dependencies..."
 
 # Check if composer is available
 if command -v composer &> /dev/null; then

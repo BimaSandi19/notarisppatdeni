@@ -188,9 +188,9 @@
                     </tbody>
                 </table>
 
-                {{-- Pagination (uses custom pagination template with forced onEachSide(2) windowing) --}}
+                {{-- Pagination (uses bootstrap-5 pagination template) --}}
                 <div class="mt-3">
-                    {{ $data->links('pagination::custom-bootstrap-5') }}
+                    {{ $data->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
