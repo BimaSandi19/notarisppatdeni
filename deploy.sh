@@ -147,6 +147,10 @@ echo ""
 # ========================================
 echo "⚡ Step 9: Optimizing application..."
 
+# Clear old cache first to ensure fresh compilation
+php artisan view:clear
+echo "✅ Old view cache cleared"
+
 php artisan optimize:clear
 php artisan config:cache
 echo "✅ Config cached"
