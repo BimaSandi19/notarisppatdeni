@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use faker\Factory as Faker;
+use Faker\Factory as Faker;
 
 class HistorySeeder extends Seeder
 {
