@@ -43,9 +43,20 @@ echo "✅ Environment check passed"
 echo ""
 
 # ========================================
-# 2. DEPENDENCIES INSTALLATION
+# 3. PUBLISH VENDOR ASSETS
 # ========================================
-echo "📦 Step 2: Installing dependencies..."
+echo "📦 Step 3: Publishing vendor assets..."
+
+# Publish Laravel pagination views
+php artisan vendor:publish --tag=laravel-pagination --force 2>/dev/null || true
+
+echo "✅ Vendor assets published"
+echo ""
+
+# ========================================
+# 4. DEPENDENCIES INSTALLATION
+# ========================================
+echo "📦 Step 4: Installing dependencies..."
 
 # Check if composer is available
 if command -v composer &> /dev/null; then
@@ -68,9 +79,9 @@ fi
 echo ""
 
 # ========================================
-# 3. BUILD ASSETS
+# 5. BUILD ASSETS
 # ========================================
-echo "🔨 Step 3: Building production assets..."
+echo "🔨 Step 5: Building production assets..."
 
 if command -v npm &> /dev/null; then
     if [ -f "package.json" ]; then
@@ -90,9 +101,9 @@ fi
 echo ""
 
 # ========================================
-# 4. ENVIRONMENT SETUP
+# 6. ENVIRONMENT SETUP
 # ========================================
-echo "⚙️  Step 4: Setting up environment..."
+echo "⚙️  Step 6: Setting up environment..."
 
 # Check if .env exists
 if [ ! -f ".env" ]; then
@@ -119,18 +130,18 @@ fi
 echo ""
 
 # ========================================
-# 5. DATABASE MIGRATION
+# 7. DATABASE MIGRATION
 # ========================================
-echo "🗄️  Step 5: Running database migrations..."
+echo "🗄️  Step 7: Running database migrations..."
 
 php artisan migrate --force
 echo "✅ Migrations completed"
 echo ""
 
 # ========================================
-# 6. DATABASE SEEDING (Production-safe)
+# 8. DATABASE SEEDING (Production-safe)
 # ========================================
-echo "🌱 Step 6: Seeding database..."
+echo "🌱 Step 8: Seeding database..."
 
 if [ "$1" == "--seed" ]; then
     echo "Seeding database..."
@@ -143,9 +154,9 @@ fi
 echo ""
 
 # ========================================
-# 7. OPTIMIZATION
+# 9. OPTIMIZATION
 # ========================================
-echo "⚡ Step 7: Optimizing application..."
+echo "⚡ Step 9: Optimizing application..."
 
 php artisan optimize:clear
 php artisan config:cache
@@ -160,9 +171,9 @@ echo "✅ Views cached"
 echo ""
 
 # ========================================
-# 8. STORAGE SYMLINK
+# 10. STORAGE SYMLINK
 # ========================================
-echo "🔗 Step 8: Setting up storage symlink..."
+echo "🔗 Step 10: Setting up storage symlink..."
 
 if [ ! -L "public/storage" ]; then
     php artisan storage:link
@@ -174,9 +185,9 @@ fi
 echo ""
 
 # ========================================
-# 9. CLEANUP
+# 11. CLEANUP
 # ========================================
-echo "🧹 Step 9: Cleaning up..."
+echo "🧹 Step 11: Cleaning up..."
 
 if [ "$2" == "--cleanup" ]; then
     if [ -d "node_modules" ]; then
@@ -189,9 +200,9 @@ fi
 echo ""
 
 # ========================================
-# 10. VERIFICATION
+# 12. VERIFICATION
 # ========================================
-echo "✅ Step 10: Verifying deployment..."
+echo "✅ Step 12: Verifying deployment..."
 
 php artisan route:list --path=admin/dashboard > /dev/null 2>&1
 if [ $? -eq 0 ]; then
