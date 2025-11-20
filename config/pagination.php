@@ -15,6 +15,6 @@ return [
     |
     */
 
-    'view' => 'pagination.custom-bootstrap-5',
+    'view' => 'bootstrap-5',
 
 ];
