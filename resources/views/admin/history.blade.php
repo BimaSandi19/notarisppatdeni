@@ -169,9 +169,9 @@
                     </tbody>
                 </table>
 
-                {{-- Pagination (uses bootstrap-5 pagination template) --}}
+                {{-- Pagination (uses custom pagination template) --}}
                 <div class="mt-3">
-                    {{ $data->links('pagination::bootstrap-5') }}
+                    {{ $data->links('pagination::custom-bootstrap-5') }}
                 </div>
             </div>
         </div>
