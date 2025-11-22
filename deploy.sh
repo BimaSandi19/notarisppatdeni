@@ -50,6 +50,12 @@ echo "📦 Step 3: Installing dependencies..."
 # Check if composer is available
 if command -v composer &> /dev/null; then
     echo "Installing PHP dependencies..."
+    # Remove old vendor folder to avoid permission issues
+    if [ -d "vendor" ]; then
+        echo "Removing old vendor folder..."
+        rm -rf vendor
+        echo "✅ Old vendor removed"
+    fi
     composer install --optimize-autoloader --no-dev --no-interaction
     echo "✅ PHP dependencies installed"
 else
