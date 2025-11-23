@@ -315,11 +315,13 @@ class AdminController extends Controller
         // Validasi data
         $validated = $request->validate([
             'nama_nasabah' => 'required|string|max:255',
-            'nomor_kwitansi' => 'required|string|max:255',
+            'nomor_kwitansi' => 'required|string|max:255|regex:/^[A-Za-z0-9]+$/',
             'nominal_tagihan' => 'required|string',
             'status_pembayaran' => 'required|string',
             'keterangan' => 'nullable|string',
             'tanggal_tagihan' => 'required|date',
+        ], [
+            'nomor_kwitansi.regex' => 'Nomor kwitansi hanya boleh mengandung huruf (A-Z, a-z) dan angka (0-9), tanpa simbol.',
         ]);
 
         // Menghapus titik dari nominal_tagihan untuk mengubahnya menjadi angka
@@ -375,6 +377,13 @@ class AdminController extends Controller
      */
     public function update(Request $request)
     {
+        // Validasi nomor_kwitansi jika ada perubahan
+        $validated = $request->validate([
+            'nomor_kwitansi' => 'required|string|max:255|regex:/^[A-Za-z0-9]+$/',
+        ], [
+            'nomor_kwitansi.regex' => 'Nomor kwitansi hanya boleh mengandung huruf (A-Z, a-z) dan angka (0-9), tanpa simbol.',
+        ]);
+
         // Hapus format titik dari nominal_tagihan
         $nominalTagihan = str_replace('.', '', $request->nominal_tagihan);
 
