@@ -126,6 +126,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     allowInput: true,
                     clickOpens: true,
                     locale: "id",
+                    // Prevent selecting dates before today (best practice for due date)
+                    minDate: new Date(),
                     // ensure calendar appears above modal/backdrop
                     onOpen: function (selectedDates, dateStr, instance) {
                         if (instance.calendarContainer)
