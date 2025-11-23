@@ -21,7 +21,8 @@
                             <div class="mb-3">
                                 <label for="nomor_kwitansi_create" class="form-label">Nomor Kwitansi</label>
                                 <input type="text" class="form-control" id="nomor_kwitansi_create" name="nomor_kwitansi"
-                                    required>
+                                    placeholder="Hanya huruf dan angka" required pattern="[A-Za-z0-9]*"
+                                    title="Hanya huruf (A-Z, a-z) dan angka (0-9) yang diizinkan">
                             </div>
 
                             <div class="mb-3">
@@ -108,7 +109,7 @@
                                 <label for="nomor_kwitansi_edit" class="form-label">Nomor Kwitansi</label>
                                 <input type="text" class="form-control" id="nomor_kwitansi_edit"
                                     style="cursor: not-allowed" disabled
-                                    title="Nomor kwitansi tidak dapat diubah setelah tagihan dibuat">
+                                    title="Nomor kwitansi tidak dapat diubah setelah tagihan dibuat" pattern="[A-Za-z0-9]*">
                                 <!-- Hidden input untuk submit form -->
                                 <input type="hidden" name="nomor_kwitansi" id="nomor_kwitansi_edit_hidden">
                             </div>
@@ -165,3 +166,30 @@
         </div>
     </div>
 </div>
+
+{{-- Script: Filter input nomor kwitansi agar hanya huruf dan angka --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Filter untuk nomor kwitansi (hanya huruf dan angka)
+    const kwitansiInputs = ['nomor_kwitansi_create', 'nomor_kwitansi_edit'];
+    
+    kwitansiInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.addEventListener('input', function(e) {
+                // Hapus karakter yang bukan huruf atau angka
+                this.value = this.value.replace(/[^A-Za-z0-9]/g, '');
+            });
+            
+            // Validasi saat paste
+            input.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+                // Filter hanya huruf dan angka
+                const filteredText = pastedText.replace(/[^A-Za-z0-9]/g, '');
+                this.value += filteredText;
+            });
+        }
+    });
+});
+</script>
