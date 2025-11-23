@@ -129,7 +129,7 @@
 
                             {{-- CTA Button --}}
                             <div style="text-align: center; margin: 30px 0 20px 0;">
-                                <a href="{{ url('http://127.0.0.1:8000/admin/reminder') }}"
+                                <a href="{{ url('https://notarisdeni.web.id/admin/reminder') }}"
                                     style="display: inline-block; background: linear-gradient(135deg, #d4a017 0%, #c9a233 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 12px rgba(212, 160, 23, 0.3); transition: all 0.3s; line-height: 1.5;">
                                     <span style="display: inline-block; vertical-align: middle; margin-left: 6px;">📋
                                         Lihat Detail di Sistem</span>
