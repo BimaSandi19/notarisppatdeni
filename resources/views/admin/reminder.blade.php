@@ -234,6 +234,16 @@
             });
         </script>
     @endif
+
+    {{-- Keep modal open if there are validation errors --}}
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const tambahModal = new bootstrap.Modal(document.getElementById('tambahReminder'));
+                tambahModal.show();
+            });
+        </script>
+    @endif
 @endsection
 
 @include('components.admFooter')

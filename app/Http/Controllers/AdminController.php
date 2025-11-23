@@ -321,7 +321,12 @@ class AdminController extends Controller
             'keterangan' => 'nullable|string',
             'tanggal_tagihan' => 'required|date',
         ], [
-            'nomor_kwitansi.regex' => 'Nomor kwitansi hanya boleh mengandung huruf (A-Z, a-z) dan angka (0-9), tanpa simbol.',
+            'nomor_kwitansi.regex' => 'Nomor kwitansi hanya boleh mengandung huruf dan angka, tanpa simbol.',
+            'nama_nasabah.required' => 'Nama nasabah harus diisi.',
+            'nomor_kwitansi.required' => 'Nomor kwitansi harus diisi.',
+            'nominal_tagihan.required' => 'Nominal tagihan harus diisi.',
+            'tanggal_tagihan.required' => 'Tanggal jatuh tempo harus diisi.',
+            'tanggal_tagihan.date' => 'Format tanggal tidak valid.',
         ]);
 
         // Menghapus titik dari nominal_tagihan untuk mengubahnya menjadi angka
@@ -381,7 +386,7 @@ class AdminController extends Controller
         $validated = $request->validate([
             'nomor_kwitansi' => 'required|string|max:255|regex:/^[A-Za-z0-9]+$/',
         ], [
-            'nomor_kwitansi.regex' => 'Nomor kwitansi hanya boleh mengandung huruf (A-Z, a-z) dan angka (0-9), tanpa simbol.',
+            'nomor_kwitansi.regex' => 'Nomor kwitansi hanya boleh mengandung huruf dan angka, tanpa simbol.',
         ]);
 
         // Hapus format titik dari nominal_tagihan
