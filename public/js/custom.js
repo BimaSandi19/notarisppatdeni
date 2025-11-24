@@ -103,8 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("resize", () => {
         if (window.innerWidth >= 992) {
             // Desktop: remove mobile classes
-            sidebar.classList.remove("show");
-            backdrop.classList.remove("show");
+            if (sidebar) sidebar.classList.remove("show");
+            if (backdrop) backdrop.classList.remove("show");
         } else {
             // Mobile: remove collapse class
             document.body.classList.remove("sidebar-collapsed");
