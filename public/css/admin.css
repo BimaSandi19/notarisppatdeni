@@ -368,9 +368,9 @@ main header {
         margin: 0 auto;
     }
 
-    /* optional: cegah “bentol” tepi kanan */
+    /* optional: cegah "bentol" tepi kanan */
     .card-header {
-        overflow: hidden;
+        overflow: visible; /* Changed from overflow: hidden to allow dropdown to show */
     }
 }
 
