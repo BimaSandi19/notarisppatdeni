@@ -4,6 +4,22 @@
 @section('page_title', 'Riwayat Tagihan')
 
 @section('content')
+    <style>
+        /* Fix dropdown z-index issue on mobile */
+        .card {
+            position: relative;
+        }
+
+        .card-header {
+            position: relative;
+            z-index: 10;
+        }
+
+        .dropdown-menu {
+            z-index: 1050 !important;
+        }
+    </style>
+
     <div class="container-fluid py-3">
         {{-- Header --}}
         <div class="row align-items-center mb-3">

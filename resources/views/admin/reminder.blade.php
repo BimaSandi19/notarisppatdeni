@@ -4,6 +4,22 @@
 @section('page_title', 'Pengingat Tagihan')
 
 @section('content')
+    <style>
+        /* Fix dropdown z-index issue on mobile */
+        .card {
+            position: relative;
+        }
+
+        .card-header {
+            position: relative;
+            z-index: 10;
+        }
+
+        .dropdown-menu {
+            z-index: 1050 !important;
+        }
+    </style>
+
     <div class="container-fluid py-3">
         {{-- Header --}}
         <div class="row align-items-center mb-3">
@@ -238,7 +254,7 @@
     {{-- Keep modal open if there are validation errors --}}
     @if ($errors->any())
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const tambahModal = new bootstrap.Modal(document.getElementById('tambahReminder'));
                 tambahModal.show();
             });
