@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Faker\Factory as Faker;
 
 class ReminderSeeder extends Seeder
 {
@@ -14,7 +14,19 @@ class ReminderSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create('id_ID');
+        // Contoh nama. Dipakai random supaya data tetap bervariasi
+        $namaNasabahList = [
+            'Budi Santoso',
+            'Siti Aminah',
+            'Andi Pratama',
+            'Dewi Lestari',
+            'Rudi Hartono',
+            'Rina Kurniawati',
+            'Ahmad Fauzi',
+            'Kartika Sari',
+            'Yusuf Maulana',
+            'Lia Wulandari',
+        ];
 
         $keteranganPending = [
             'Menunggu konfirmasi pembayaran.',
@@ -32,52 +44,52 @@ class ReminderSeeder extends Seeder
         $data = [];
 
         for ($i = 1; $i <= 100; $i++) {
-            // Distribusi tanggal jatuh tempo (semua masih akan datang):
-            // 30% -> 3-7 hari lagi (1/2 minggu)
-            // 35% -> 20-35 hari lagi (~1 bulan)
-            // 35% -> 50-65 hari lagi (~2 bulan)
 
+            // Distribusi tanggal jatuh tempo (semua di masa depan):
+            // 30% -> 3-7 hari lagi
+            // 35% -> 20-35 hari lagi
+            // 35% -> 50-65 hari lagi
             $random = rand(1, 100);
 
             if ($random <= 30) {
-                // 1/2 minggu lagi (3-7 hari)
-                $tanggal = Carbon::now()->addDays(rand(3, 7))->format('Y-m-d');
+                $tanggal = Carbon::now()->addDays(rand(3, 7));
             } elseif ($random <= 65) {
-                // ~1 bulan lagi (20-35 hari)
-                $tanggal = Carbon::now()->addDays(rand(20, 35))->format('Y-m-d');
+                $tanggal = Carbon::now()->addDays(rand(20, 35));
             } else {
-                // ~2 bulan lagi (50-65 hari)
-                $tanggal = Carbon::now()->addDays(rand(50, 65))->format('Y-m-d');
+                $tanggal = Carbon::now()->addDays(rand(50, 65));
             }
 
-            // Random nominal antara 500.000 - 10.000.000
+            // Nominal antara 500.000 – 10.000.000
             $nominal = rand(50, 1000) * 10000;
 
-            $keterangan = $keteranganPending[array_rand($keteranganPending)];
+            $keterangan   = $keteranganPending[array_rand($keteranganPending)];
+            $namaNasabah  = $namaNasabahList[array_rand($namaNasabahList)];
+            // KW + 8 karakter alfanumerik huruf besar, tanpa Faker
+            $nomorKwitansi = 'KW' . strtoupper(Str::random(8));
 
             $data[] = [
-                'nama_nasabah' => $faker->name(),
-                'nomor_kwitansi' => 'KW' . strtoupper($faker->bothify('########')),
-                'nominal_tagihan' => $nominal,
-                'tanggal_tagihan' => $tanggal,
+                'nama_nasabah'      => $namaNasabah,
+                'nomor_kwitansi'    => $nomorKwitansi,
+                'nominal_tagihan'   => $nominal,
+                'tanggal_tagihan'   => $tanggal->format('Y-m-d'),
                 'status_pembayaran' => 'Pending',
-                'keterangan' => $keterangan,
-                'is_approved' => 0,
-                'is_canceled' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'keterangan'        => $keterangan,
+                'is_approved'       => 0,
+                'is_canceled'       => 0,
+                'created_at'        => now(),
+                'updated_at'        => now(),
             ];
         }
 
-        // Insert data in chunks to avoid memory issues
+        // Insert per 25 row untuk efisiensi
         foreach (array_chunk($data, 25) as $chunk) {
             DB::table('reminders')->insert($chunk);
         }
 
-        $this->command->info('✅ Successfully seeded 100 reminder records!');
-        $this->command->info('📊 All reminders status "Pending" (upcoming only):');
-        $this->command->info('   - 30% will be due in 3-7 days (~1/2 week)');
-        $this->command->info('   - 35% will be due in 20-35 days (~1 month)');
-        $this->command->info('   - 35% will be due in 50-65 days (~2 months)');
+        $this->command?->info('✅ Successfully seeded 100 reminder records!');
+        $this->command?->info('📊 All reminders status "Pending" (upcoming only):');
+        $this->command?->info('   - 30% will be due in 3-7 days (~1/2 week)');
+        $this->command?->info('   - 35% will be due in 20-35 days (~1 month)');
+        $this->command?->info('   - 35% will be due in 50-65 days (~2 months)');
     }
 }

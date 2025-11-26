@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Faker\Factory as Faker;
 
 class HistorySeeder extends Seeder
 {
@@ -14,8 +14,6 @@ class HistorySeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create('id_ID');
-
         $statuses = ['Lunas', 'Dibatalkan'];
 
         $keteranganLunas = [
@@ -40,40 +38,53 @@ class HistorySeeder extends Seeder
             'Revisi tagihan diperlukan.',
         ];
 
+        // Contoh nama untuk variasi (tanpa Faker)
+        $namaNasabahList = [
+            'Budi Santoso', 'Siti Aminah', 'Andi Pratama', 'Dewi Lestari',
+            'Rudi Hartono', 'Rina Kurniawati', 'Ahmad Fauzi', 'Kartika Sari',
+            'Yusuf Maulana', 'Lia Wulandari'
+        ];
+
         $data = [];
 
         for ($i = 1; $i <= 100; $i++) {
+
             $status = $statuses[array_rand($statuses)];
+
+            // Tanggal 1—365 hari ke belakang (riwayat)
             $tanggal = Carbon::now()->subDays(rand(1, 365))->format('Y-m-d');
 
-            // Random nominal antara 500.000 - 10.000.000
+            // Nominal 500.000 – 10.000.000
             $nominal = rand(50, 1000) * 10000;
 
-            // Pilih keterangan sesuai status
-            if ($status === 'Lunas') {
-                $keterangan = $keteranganLunas[array_rand($keteranganLunas)];
-            } else {
-                $keterangan = $keteranganDibatalkan[array_rand($keteranganDibatalkan)];
-            }
+            // Keterangan sesuai status
+            $keterangan = $status === 'Lunas'
+                ? $keteranganLunas[array_rand($keteranganLunas)]
+                : $keteranganDibatalkan[array_rand($keteranganDibatalkan)];
+
+            $namaNasabah  = $namaNasabahList[array_rand($namaNasabahList)];
+
+            // KW + random alphanumeric 8 karakter (tanpa Faker)
+            $nomorKwitansi = 'KW' . strtoupper(Str::random(8));
 
             $data[] = [
-                'nama_nasabah' => $faker->name(),
-                'nomor_kwitansi' => 'KW' . strtoupper($faker->bothify('########')),
-                'nominal_tagihan' => $nominal,
-                'tanggal_tagihan' => $tanggal,
+                'nama_nasabah'      => $namaNasabah,
+                'nomor_kwitansi'    => $nomorKwitansi,
+                'nominal_tagihan'   => $nominal,
+                'tanggal_tagihan'   => $tanggal,
                 'status_pembayaran' => $status,
-                'keterangan' => $keterangan,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'keterangan'        => $keterangan,
+                'created_at'        => now(),
+                'updated_at'        => now(),
             ];
         }
 
-        // Insert data in chunks to avoid memory issues
+        // Insert batch
         foreach (array_chunk($data, 50) as $chunk) {
             DB::table('history')->insert($chunk);
         }
 
-        $this->command->info('✅ Successfully seeded 100 history records!');
-        $this->command->info('📊 Status breakdown will be random (approximately 50% Lunas, 50% Dibatalkan)');
+        $this->command?->info('✅ Successfully seeded 100 history records!');
+        $this->command?->info('📊 Status breakdown: random approx. 50% Lunas, 50% Dibatalkan');
     }
 }
