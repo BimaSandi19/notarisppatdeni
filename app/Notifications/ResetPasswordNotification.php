@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -12,7 +11,7 @@ class ResetPasswordNotification extends Notification
     use Queueable;
 
     public $token;
-    public $email;
+    public $resetUrl;
 
     /**
      * Create a new notification instance.
@@ -20,6 +19,9 @@ class ResetPasswordNotification extends Notification
     public function __construct($token)
     {
         $this->token = $token;
+        $this->resetUrl = url(route('password.reset', [
+            'token' => $token,
+        ], false));
     }
 
     /**
@@ -33,26 +35,16 @@ class ResetPasswordNotification extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail($notifiable): MailMessage
+    public function toMail($notifiable)
     {
-        $resetUrl = url(route('password.reset', [
-            'token' => $this->token,
-            'email' => $notifiable->getEmailForPasswordReset(),
-        ], false));
+        $resetUrl = $this->resetUrl . '?email=' . urlencode($notifiable->getEmailForPasswordReset());
+        $name = $notifiable->nama ?? $notifiable->username ?? 'User';
 
         return (new MailMessage)
             ->subject('Reset Password - WebsiteDN')
-            ->view('emails.reset-password', [
+            ->view('emails.reset-password-notification', [
                 'resetUrl' => $resetUrl,
-                'name' => $notifiable->nama ?? $notifiable->username ?? 'User',
+                'name' => $name,
             ]);
-    }
-
-    /**
-     * Get the array representation of the notification.
-     */
-    public function toArray($notifiable): array
-    {
-        return [];
     }
 }
