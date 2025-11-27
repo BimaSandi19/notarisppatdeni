@@ -42,7 +42,7 @@
                 <li class="nav-item me-2">
                     <a href="#sendMail" class="nav-link link-dark px-2 border-end" aria-current="page"><span
                             class="iconify mx-2" data-icon="iconamoon:email-light" data-inline="true"></span>
-                        Email : infonotdeninugraha@gmail.com</a>
+                        Email : deninugrahakantornotaris@gmail.com</a>
                 </li>
             </ul>
         </div>
