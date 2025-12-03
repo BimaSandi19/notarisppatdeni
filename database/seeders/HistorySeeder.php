@@ -40,9 +40,16 @@ class HistorySeeder extends Seeder
 
         // Contoh nama untuk variasi (tanpa Faker)
         $namaNasabahList = [
-            'Budi Santoso', 'Siti Aminah', 'Andi Pratama', 'Dewi Lestari',
-            'Rudi Hartono', 'Rina Kurniawati', 'Ahmad Fauzi', 'Kartika Sari',
-            'Yusuf Maulana', 'Lia Wulandari'
+            'Budi Santoso',
+            'Siti Aminah',
+            'Andi Pratama',
+            'Dewi Lestari',
+            'Rudi Hartono',
+            'Rina Kurniawati',
+            'Ahmad Fauzi',
+            'Kartika Sari',
+            'Yusuf Maulana',
+            'Lia Wulandari'
         ];
 
         $data = [];
