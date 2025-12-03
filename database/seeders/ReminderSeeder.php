@@ -65,10 +65,11 @@ class ReminderSeeder extends Seeder
             $keterangan   = $keteranganPending[array_rand($keteranganPending)];
             $namaNasabah  = $namaNasabahList[array_rand($namaNasabahList)];
             // Format: DN-YY/MM/NNN (contoh: DN-23/XI/129)
+            $bulanRomawi = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
             $tahun = date('y');
-            $bulan = rand(1, 12);
+            $bulan = $bulanRomawi[rand(0, 11)];
             $nomorUrut = str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
-            $nomorKwitansi = 'DN-' . $tahun . '/' . str_pad($bulan, 2, '0', STR_PAD_LEFT) . '/' . $nomorUrut;
+            $nomorKwitansi = 'DN-' . $tahun . '/' . $bulan . '/' . $nomorUrut;
 
             $data[] = [
                 'nama_nasabah'      => $namaNasabah,
