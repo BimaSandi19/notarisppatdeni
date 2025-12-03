@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -49,6 +50,7 @@ jobs:
             ./ \
             ${SSH_USER}@${SSH_HOST}:${REMOTE_APP_DIR}/ || true
 
+      # Optional: rapikan permission storage/cache SEBELUM deploy.sh jalan
       - name: Fix storage permissions before deploy
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
@@ -56,11 +58,13 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
           REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
         run: |
-          echo "Fixing storage and cache permissions..."
+          echo "Fixing storage and cache permissions (pre-deploy)..."
           ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
             "cd ${REMOTE_APP_DIR} && \
-            sudo chmod -R 777 storage bootstrap/cache 2>/dev/null || true && \
-            echo 'Permissions fixed'"
+            mkdir -p storage bootstrap/cache && \
+            sudo chown -R ${SSH_USER}:www-data storage bootstrap/cache && \
+            sudo chmod -R 775 storage bootstrap/cache || true && \
+            echo 'Pre-deploy permissions fixed'"
 
       - name: Run remote deploy script
         env:
@@ -69,18 +73,22 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
           REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
         run: |
-          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "cd ${REMOTE_APP_DIR} && bash deploy.sh"
+          echo "Running remote deploy script..."
+          ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+            "cd ${REMOTE_APP_DIR} && bash deploy.sh"
 
-      - name: Fix permissions and restart
+      - name: Fix permissions and restart services
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
           REMOTE_APP_DIR: ${{ secrets.REMOTE_APP_DIR }}
         run: |
+          echo "Fixing final permissions and restarting PHP/Nginx..."
           ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
             "cd ${REMOTE_APP_DIR} && \
-            sudo chown -R deploy:www-data storage bootstrap/cache && \
+            sudo chown -R ${SSH_USER}:www-data storage bootstrap/cache && \
             sudo chmod -R 775 storage bootstrap/cache && \
             sudo systemctl restart php8.3-fpm && \
-            sudo systemctl restart nginx"
+            sudo systemctl restart nginx && \
+            echo 'Final permissions fixed & services restarted'"
