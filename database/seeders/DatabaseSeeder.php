@@ -16,9 +16,9 @@ class DatabaseSeeder extends Seeder
         // ALWAYS seed admin user (diperlukan untuk login pertama kali di production)
         DB::table('users')->insert([
             'nama' => 'Admin Keuangan',
-            'username' => env('ADMIN_USERNAME'),
-            'email'          => env('ADMIN_EMAIL'),
-            'password' => Hash::make(env('ADMIN_PASSWORD')),
+            'username' => config('admin.username'),
+            'email'          => config('admin.email'),
+            'password' => Hash::make(config('admin.password')),
             'terakhir_login' => null, // Awalnya null sampai user pertama kali login
             'created_at'     => now(),
             'updated_at'     => now(),
