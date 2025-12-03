@@ -64,8 +64,11 @@ class HistorySeeder extends Seeder
 
             $namaNasabah  = $namaNasabahList[array_rand($namaNasabahList)];
 
-            // KW + random alphanumeric 8 karakter (tanpa Faker)
-            $nomorKwitansi = 'KW' . strtoupper(Str::random(8));
+            // Format: DN-YY/MM/NNN (contoh: DN-23/XI/129)
+            $tahun = date('y');
+            $bulan = rand(1, 12);
+            $nomorUrut = str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
+            $nomorKwitansi = 'DN-' . $tahun . '/' . str_pad($bulan, 2, '0', STR_PAD_LEFT) . '/' . $nomorUrut;
 
             $data[] = [
                 'nama_nasabah'      => $namaNasabah,
