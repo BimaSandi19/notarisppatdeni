@@ -119,33 +119,18 @@ fi
 echo ""
 
 # ========================================
-# 7. FIX FILE PERMISSIONS
+# 7. DATABASE MIGRATION
 # ========================================
-echo "🔐 Step 7: Fixing file permissions..."
-
-# Fix storage and bootstrap/cache directories
-if [ -d "storage" ]; then
-    chmod -R ug+rwx storage bootstrap/cache
-    echo "✅ Storage and cache permissions fixed"
-else
-    echo "⚠️  Warning: storage directory not found"
-fi
-
-echo ""
-
-# ========================================
-# 8. DATABASE MIGRATION
-# ========================================
-echo "🗄️  Step 8: Running database migrations..."
+echo "🗄️  Step 7: Running database migrations..."
 
 php artisan migrate --force
 echo "✅ Migrations completed"
 echo ""
 
 # ========================================
-# 9. DATABASE SEEDING (Production-safe)
+# 8. DATABASE SEEDING (Production-safe)
 # ========================================
-echo "🌱 Step 9: Seeding database..."
+echo "🌱 Step 8: Seeding database..."
 
 if [ "$1" == "--seed" ]; then
     echo "Seeding database..."
@@ -158,9 +143,9 @@ fi
 echo ""
 
 # ========================================
-# 10. OPTIMIZATION
+# 9. OPTIMIZATION
 # ========================================
-echo "⚡ Step 10: Optimizing application..."
+echo "⚡ Step 9: Optimizing application..."
 
 # Clear old cache first to ensure fresh compilation
 php artisan view:clear
@@ -179,9 +164,9 @@ echo "✅ Views cached"
 echo ""
 
 # ========================================
-# 11. STORAGE SYMLINK
+# 10. STORAGE SYMLINK
 # ========================================
-echo "🔗 Step 11: Setting up storage symlink..."
+echo "🔗 Step 10: Setting up storage symlink..."
 
 if [ ! -L "public/storage" ]; then
     php artisan storage:link
@@ -193,9 +178,9 @@ fi
 echo ""
 
 # ========================================
-# 12. CLEANUP
+# 11. CLEANUP
 # ========================================
-echo "🧹 Step 12: Cleaning up..."
+echo "🧹 Step 11: Cleaning up..."
 
 if [ "$2" == "--cleanup" ]; then
     if [ -d "node_modules" ]; then
@@ -208,9 +193,9 @@ fi
 echo ""
 
 # ========================================
-# 13. VERIFICATION
+# 12. VERIFICATION
 # ========================================
-echo "✅ Step 13: Verifying deployment..."
+echo "✅ Step 12: Verifying deployment..."
 
 php artisan route:list --path=admin/dashboard > /dev/null 2>&1
 if [ $? -eq 0 ]; then
