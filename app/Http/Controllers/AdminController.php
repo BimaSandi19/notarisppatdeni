@@ -315,13 +315,13 @@ class AdminController extends Controller
         // Validasi data
         $validated = $request->validate([
             'nama_nasabah' => 'required|string|max:255',
-            'nomor_kwitansi' => 'required|string|max:255|regex:/^[A-Za-z0-9]+$/',
+            'nomor_kwitansi' => 'required|string|max:255|regex:/^[A-Za-z0-9\-\/]+$/',
             'nominal_tagihan' => 'required|string',
             'status_pembayaran' => 'required|string',
             'keterangan' => 'nullable|string',
             'tanggal_tagihan' => 'required|date',
         ], [
-            'nomor_kwitansi.regex' => 'Nomor kwitansi hanya boleh mengandung huruf dan angka, tanpa simbol.',
+            'nomor_kwitansi.regex' => 'Nomor kwitansi hanya boleh mengandung huruf, angka, dash (-), dan garis miring (/).',
             'nama_nasabah.required' => 'Nama nasabah harus diisi.',
             'nomor_kwitansi.required' => 'Nomor kwitansi harus diisi.',
             'nominal_tagihan.required' => 'Nominal tagihan harus diisi.',
@@ -384,9 +384,9 @@ class AdminController extends Controller
     {
         // Validasi nomor_kwitansi jika ada perubahan
         $validated = $request->validate([
-            'nomor_kwitansi' => 'required|string|max:255|regex:/^[A-Za-z0-9]+$/',
+            'nomor_kwitansi' => 'required|string|max:255|regex:/^[A-Za-z0-9\-\/]+$/',
         ], [
-            'nomor_kwitansi.regex' => 'Nomor kwitansi hanya boleh mengandung huruf dan angka, tanpa simbol.',
+            'nomor_kwitansi.regex' => 'Nomor kwitansi hanya boleh mengandung huruf, angka, dash (-), dan garis miring (/).',
         ]);
 
         // Hapus format titik dari nominal_tagihan
